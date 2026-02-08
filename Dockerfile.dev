@@ -1,0 +1,34 @@
+# Development Dockerfile with Air for hot-reloading
+FROM golang:1.24-alpine AS development
+
+# Install Air for hot-reloading
+RUN go install github.com/air-verse/air@v1.61.1
+
+# Install build dependencies
+RUN apk add --no-cache git make
+
+# Set working directory
+WORKDIR /app
+
+# Copy shared packages first
+COPY omnipos-pkg /app/omnipos-pkg
+COPY omnipos-proto /app/omnipos-proto
+
+# Copy go mod files
+WORKDIR /app/omnipos-customer-service
+COPY omnipos-customer-service/go.mod omnipos-customer-service/go.sum ./
+
+RUN go mod download
+
+# Copy the rest of the source code
+COPY omnipos-customer-service/ ./
+
+# Expose gRPC port
+EXPOSE 8084
+
+# Copy entrypoint script
+COPY omnipos-customer-service/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Run entrypoint script
+CMD ["/docker-entrypoint.sh"]
