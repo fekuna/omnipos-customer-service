@@ -17,7 +17,7 @@ import (
 	"github.com/fekuna/omnipos-pkg/database/postgres"
 	"github.com/fekuna/omnipos-pkg/logger"
 	"github.com/fekuna/omnipos-pkg/middleware"
-	customerv1 "github.com/fekuna/omnipos-proto/proto/customer/v1"
+	customerv1 "github.com/fekuna/omnipos-proto/gen/go/omnipos/customer/v1"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
